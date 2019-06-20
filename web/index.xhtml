@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:b="http://bootsfaces.net/ui">
+    <h:head>
+        <title>Mostrar Personas</title>
+    </h:head>
+    <h:body>
+        &nbsp;
+        <b:container>
+            <b:form >
+                <b:commandButton action="cPersona?faces-redirect=true" style-class="some-class" look="primary" value="Ingresar" ></b:commandButton>
+                <b:dataTable value="#{personaController.lista()}" var="p" excel="true">
+                    <b:dataTableColumn value="#{p.idPersona}" />
+                    <b:dataTableColumn value="#{p.nombre}" />
+                    <b:dataTableColumn value="#{p.sexo}" />
+                    <b:dataTableColumn label="Editar"><b:commandButton value="Editar" look="primary" action="#{personaController.editarPerson(p)}"/></b:dataTableColumn>
+                    <b:dataTableColumn label="Eliminar"><b:commandButton value="Eliminar" look="danger" action="#{personaController.eliminarPersona(p)}"/></b:dataTableColumn>
+                </b:dataTable>
+            </b:form>
+        </b:container>
+    </h:body>
+</html>
+
