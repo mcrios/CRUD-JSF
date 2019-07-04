@@ -16,33 +16,61 @@ import javax.persistence.EntityManager;
  * @author DataSoft
  */
 public class PersonaDAO {
-    private EntityManager em = Connection.getEntityManagerFactory().createEntityManager();
+
+    private EntityManager em;
     
-    public List<Persona> finAll(){
+    public PersonaDAO(EntityManager entityManager){
+        this.em = entityManager;
+    }
+
+    public List<Persona> finAll() {
         List<Persona> personas = new ArrayList<>();
+        //em = Connection.getEntityManagerFactory().createEntityManager();
+        //em.getTransaction().begin();
         personas = em.createNamedQuery("Persona.findAll", Persona.class).getResultList();
+        //em.close();
         return personas;
     }
-    public void save(Persona p){
-        em.getTransaction().begin();
-        try{
-        em.persist(p);
-        em.getTransaction().commit();
-        }catch(Exception e){
-            em.getTransaction().rollback();
+
+    public void save(Persona p) {
+        //em = Connection.getEntityManagerFactory().createEntityManager();
+        try {
+            //em.getTransaction().begin();
+            em.persist(p);
+            //em.getTransaction().commit();
+        } catch (Exception e) {
+            //em.getTransaction().rollback();
             System.out.println("ERROR AL GUARDAR " + e.getMessage());
+        } finally {
+            //em.close();
         }
     }
-    
-    public void editar(Persona p){
-        em.getTransaction().begin();
-        em.merge(p);
-        em.getTransaction().commit();
+
+    public void editar(Persona p) {
+        //em = Connection.getEntityManagerFactory().createEntityManager();
+        try {
+            //em.getTransaction().begin();
+            em.merge(p);
+            //em.getTransaction().commit();
+        } catch (Exception e) {
+            //em.getTransaction().rollback();
+            System.out.println("ERROR AL EDITAR " + e.getMessage());
+        } finally {
+            //em.close();
+        }
     }
-    
-    public void eliminar(Persona p){
-        em.getTransaction().begin();
-        em.remove(em.merge(p));
-        em.getTransaction().commit();
+
+    public void eliminar(Persona p) {
+        //em = Connection.getEntityManagerFactory().createEntityManager();
+        try {
+            //em.getTransaction().begin();
+            em.remove(em.merge(p));
+            //em.getTransaction().commit();
+        } catch (Exception e) {
+            //em.getTransaction().rollback();
+            System.out.println("ERROR AL EDITAR " + e.getMessage());
+        } finally {
+            //em.close();
+        }
     }
 }

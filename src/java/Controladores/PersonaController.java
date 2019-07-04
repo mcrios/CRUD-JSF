@@ -9,26 +9,37 @@ import DAO.PersonaDAO;
 import Entidades.Persona;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.RequestScoped;
 import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+import javax.persistence.EntityManager;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  *
  * @author DataSoft
  */
 @ManagedBean
-@SessionScoped
+@RequestScoped
 public class PersonaController {
-
-    private Persona p = new Persona();
-    private List<Persona> personas;
-    private PersonaDAO pDAO = new PersonaDAO();
 
     /**
      * Creates a new instance of PersonaController
      */
+    protected EntityManager getJpaEntityManager() {
+        HttpServletRequest req = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+        return (EntityManager) req.getAttribute("entityManager");
+    }
+
     public PersonaController() {
     }
+    
+    
+    private Persona p = new Persona();
+    private List<Persona> personas;
+
 
     public List<Persona> getPersonas() {
         return personas;
@@ -47,11 +58,13 @@ public class PersonaController {
     }
 
     public List<Persona> lista() {
+        PersonaDAO pDAO = new PersonaDAO(getJpaEntityManager());
         setPersonas(pDAO.finAll());
         return getPersonas();
     }
 
     public String ingresarPersona() {
+        PersonaDAO pDAO = new PersonaDAO(getJpaEntityManager());
         if (getP().getIdPersona() != null) {
             pDAO.editar(getP());
             setP(new Persona());
@@ -63,11 +76,12 @@ public class PersonaController {
     }
 
     public String editarPerson(Persona persona) {
-        setP(persona);
+        p = persona;
         return "cPersona.xhtml";
     }
-    
-    public String eliminarPersona(Persona persona){
+
+    public String eliminarPersona(Persona persona) {
+        PersonaDAO pDAO = new PersonaDAO(getJpaEntityManager());
         pDAO.eliminar(persona);
         return "index.xhtml?faces-redirect=true";
     }
